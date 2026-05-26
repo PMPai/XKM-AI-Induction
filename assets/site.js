@@ -23,3 +23,28 @@ document
     panel.addEventListener("focusin", () => panel.classList.add("is-floating"));
     panel.addEventListener("focusout", () => panel.classList.remove("is-floating"));
   });
+
+const revealItems = document.querySelectorAll(
+  ".metric, .tile, .quote-panel, .table-wrap, .hub, .step, .flow-item, .stage, .timeline-item",
+);
+
+if ("IntersectionObserver" in window) {
+  const revealObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    },
+    { rootMargin: "0px 0px -10% 0px", threshold: 0.16 },
+  );
+
+  revealItems.forEach((item) => {
+    item.classList.add("reveal-ready");
+    revealObserver.observe(item);
+  });
+} else {
+  revealItems.forEach((item) => item.classList.add("is-visible"));
+}
